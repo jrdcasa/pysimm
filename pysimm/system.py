@@ -2427,7 +2427,7 @@ class System(object):
                 p.y -= around[1]
                 p.z -= around[2]
                 if rot_matrix is not None:
-                    p.x, p.y, p.z = [x[0] for x in (rot_matrix*np.matrix([[p.x], [p.y], [p.z]])).tolist()]
+                    p.x, p.y, p.z = [x[0] for x in np.dot(rot_matrix,np.array([[p.x], [p.y], [p.z]])).tolist()]
                 else:
                     p.x, p.y, p.z = rotate_vector(p.x, p.y, p.z, theta_x, theta_y, theta_z)
                 p.x += around[0]
@@ -3788,7 +3788,9 @@ def read_yaml(file_, **kwargs):
     """
 
     if os.path.isfile(file_):
-        dict_ = json.loads(open(file_).read())
+        file = open(file_)
+        dict_ = json.loads(file.read())
+        file.close()
     else:
         dict_ = json.loads(file_)
 

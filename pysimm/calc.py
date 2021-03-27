@@ -91,7 +91,7 @@ def find_rotation(a, b):
 
     theta = acos(np.dot(a, b) / np.linalg.norm(a) / np.linalg.norm(b))
 
-    skew = np.matrix([[0, -axis[2], axis[1]],
+    skew = np.array([[0, -axis[2], axis[1]],
                      [axis[2], 0, -axis[0]],
                      [-axis[1], axis[0], 0]])
 
@@ -121,21 +121,22 @@ def rotate_vector(x, y, z, theta_x=None, theta_y=None, theta_z=None):
     yt = random() * 2 * pi if theta_y is None else theta_y
     zt = random() * 2 * pi if theta_z is None else theta_z
 
-    c = np.matrix([[x], [y], [z]])
+    #cJ PendingDeprecationWarning: the matrix subclass
+    c = np.array([[x], [y], [z]])
 
-    rot_mat_x = np.matrix([[1, 0, 0],
+    rot_mat_x = np.array([[1, 0, 0],
                            [0, cos(xt), -sin(xt)],
                            [0, sin(xt), cos(xt)]])
-    rot_mat_y = np.matrix([[cos(yt), 0, sin(yt)],
+    rot_mat_y = np.array([[cos(yt), 0, sin(yt)],
                            [0, 1, 0],
                            [-sin(yt), 0, cos(yt)]])
-    rot_mat_z = np.matrix([[cos(zt), -sin(zt), 0],
+    rot_mat_z = np.array([[cos(zt), -sin(zt), 0],
                            [sin(zt), cos(zt), 0],
                            [0, 0, 1]])
 
-    c = rot_mat_x * c
-    c = rot_mat_y * c
-    c = rot_mat_z * c
+    c = np.dot(rot_mat_x, c)
+    c = np.dot(rot_mat_y, c)
+    c = np.dot(rot_mat_z, c)
 
     return [x[0] for x in c.tolist()]
 
